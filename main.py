@@ -85,5 +85,6 @@ async def on_message(message):
 
     except Exception as e:
         print(f"Error: {e}")
+        await message.reply("⚠️ Invalid input format. Example: `x2 2 3 8 11 22 68 63`\nType must be x1/x2/x3 followed by 7 numbers.", mention_author=False)
 
 bot.run(TOKEN)
