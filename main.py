@@ -23,8 +23,12 @@ def calculate_from_line(input_line):
     ticket_type = parts[0]
     reward_counts = list(map(int, parts[1:]))
 
-    if ticket_type not in {'x1', 'x2', 'x3'} or len(reward_counts) != 7:
-        raise ValueError("Input must be like: 'x2 2 3 8 11 22 68 63'")
+    if (
+        ticket_type not in {'x1', 'x2', 'x3'}
+        or len(reward_counts) != 7
+        or reward_counts[0] not in [0, 1, 2]
+    ):
+        raise ValueError("Input must be like: 'x2 2 3 0 11 0 68 63'")
 
     value_map = {
         'x1': [270, 90, 45, 27, 9, 9, 6],
@@ -63,28 +67,46 @@ async def on_message(message):
         return
 
     try:
-        result = calculate_from_line(message.content)
+        try:
+            result = calculate_from_line(message.content)
 
-        lines = []
-        lines.append(f"**💸 Total Tickets Spent:** {result['input_tickets']}")
-        lines.append(f"**🎟️ Tickets Received (If Everything Sold):** {result['output_tickets']}")
+            lines = []
+            lines.append(
+    "⚠️ **Don't include Last Prize as 1 in the input.**\n"
+    "**It's automatically counted by default.**\n"
+    "**If you include it manually, all calculations will be incorrect.**"
+            )
+            lines.append(f"**💸 Total Tickets Spent:** {result['input_tickets']}")
+            lines.append(f"**🎟️ Tickets Received (If Everything Sold):** {result['output_tickets']}")
 
-        lp = result['loss_percent']
-        if lp > 0:
-            lines.append(f"**📈 Trade Profit (If Everything Sold):** +{lp}%")
-            lines.append("**💬 [You'll gain value with this trade, buy immediately]**")
-        else:
-            lines.append(f"**📉 Trade Loss (If Everything Sold):** {lp}%")
+            lp = result['loss_percent']
+            if lp > 0:
+                lines.append(f"**📈 Trade Profit (If Everything Sold):** +{lp}%")
+                lines.append("**💬 [You'll gain value with this trade, buy immediately]**")
+            else:
+                lines.append(f"**📉 Trade Loss (If Everything Sold):** {lp}%")
 
-        gems_each = round(result['gem_cost_per_held_reward'])
-        items_held = result['held_rewards']
-        total_gems = int(round(gems_each * items_held))
-        lines.append(f"**💎 Gem Cost:** {gems_each:,} gems each [{total_gems:,} total for {items_held} items]")
+            gems_each = round(result['gem_cost_per_held_reward'])
+            items_held = result['held_rewards']
+            total_gems = int(round(gems_each * items_held))
+            lines.append(f"**💎 Gem Cost:** {gems_each:,} gems each [{total_gems:,} total for {items_held} items]")
 
-        await message.reply("\n".join(lines), mention_author=False)
+            await message.reply("\n".join(lines), mention_author=True)
+
+        except ValueError:
+            await message.reply(
+                "⚠️ Invalid input format\n"
+                "📝 Format: `x1/x2/x3` followed by 7 reward quantities [A–G]\n"
+                "📌 Example: `x2 2 3 0 0 1 0 4`\n"
+                "🚫 Do not skip any slots\n"
+                "🟰 Use `0` if no rewards of that type available\n"
+                "❌ Do not include the last prize",
+                mention_author=True
+            )
 
     except Exception as e:
-        print(f"Error: {e}")
-        await message.reply("⚠️ Invalid input format. Example: `x2 2 3 8 11 22 68 63`\nType must be x1/x2/x3 followed by 7 numbers.", mention_author=False)
+        print(f"Unexpected error: {e}")
+        await message.reply("❌ Unexpected error occurred.", mention_author=False)
 
 bot.run(TOKEN)
+
