@@ -1,4 +1,5 @@
 import os
+import re
 import discord
 from discord.ext import commands
 from dotenv import load_dotenv
@@ -65,6 +66,10 @@ def calculate_from_line(input_line):
 async def on_message(message):
     if message.author.bot or message.channel.id != TARGET_CHANNEL_ID or message.author == bot.user:
         return
+
+    lowercase_letters = re.findall(r'[a-z]', message.content.lower())
+    if len(lowercase_letters) >= 3 and not message.content.lower().startswith(("x1", "x2", "x3")):
+        return  # likely a chat, ignore
 
     try:
         try:
