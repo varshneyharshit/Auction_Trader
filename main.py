@@ -76,7 +76,9 @@ async def on_message(message):
         return
 
     lowercase_letters = re.findall(r'[a-z]', message.content.lower())
-    if len(lowercase_letters) >= 3 and not message.content.lower().startswith(("x2", "x3")):
+    digits = re.findall(r'\d', message.content)
+
+    if (len(lowercase_letters) >= 3 or len(digits) < 4) and not message.content.lower().startswith(("x2", "x3", "x1")):
         return  # likely a chat, ignore
 
     try:
