@@ -100,8 +100,8 @@ MIT
 
 ## Connect
 
-- [Your LinkedIn](https://in.linkedin.com/in/harshit-varshney-8348911ab)
-- [Your GitHub](https://github.com/varshneyharshit)
+- [My LinkedIn](https://in.linkedin.com/in/harshit-varshney-8348911ab)
+- [My GitHub](https://github.com/varshneyharshit)
 
 ---
 
