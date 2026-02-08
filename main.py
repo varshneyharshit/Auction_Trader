@@ -87,7 +87,7 @@ async def on_message(message):
 
             lines = []
             lines.append(
-                "⚠️ **Don't include Last Prize as (1) in the input.**\n"
+                "⚠️ **Do not include Last Prize as \"1\" in the input.**\n"
                 "**It’s auto-counted. Adding it manually breaks all calculations.**\n"
                 "**Format:** <x2/x3> <80/120/160/240> <A B C D E F G>"
             )
