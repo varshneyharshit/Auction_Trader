@@ -101,9 +101,9 @@ async def on_message(message):
             total_gems = int(round(gems_each * items_held))
             lines.append(f"**💎 Gem Cost:** {gems_each:,} gems each [{total_gems:,} total for {items_held} items]")
             lines.append(
-                        "⚠️ **\nReminder: Don't include Last Prize as \"1\" in the input.**\n"
+                        "\n⚠️ **Reminder: Don't include Last Prize as \"1\" in the input.**\n"
                         "**It’s auto-counted. Adding it manually breaks all calculations.**\n"
-                        "**Format: <x2/x3> <80/120/160/240> <A B C D E F G>**"
+                        "\n**Format: <x2/x3> <80/120/160/240> <A B C D E F G>**"
             )
             await message.reply("\n".join(lines), mention_author=True)
 
