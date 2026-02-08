@@ -86,11 +86,6 @@ async def on_message(message):
             result = calculate_from_line(message.content)
 
             lines = []
-            lines.append(
-                "⚠️ **Do not include Last Prize as \"1\" in the input.**\n"
-                "**It’s auto-counted. Adding it manually breaks all calculations.**\n"
-                "**Format:** <x2/x3> <80/120/160/240> <A B C D E F G>"
-            )
             lines.append(f"**💸 Total Tickets Spent:** {result['input_tickets']}")
             lines.append(f"**🎟️ Tickets Received (If Everything Sold):** {result['output_tickets']}")
 
@@ -105,7 +100,11 @@ async def on_message(message):
             items_held = result['held_rewards']
             total_gems = int(round(gems_each * items_held))
             lines.append(f"**💎 Gem Cost:** {gems_each:,} gems each [{total_gems:,} total for {items_held} items]")
-
+            lines.append(
+                        "⚠️ **\nReminder: Don't include Last Prize as \"1\" in the input.**\n"
+                        "**It’s auto-counted. Adding it manually breaks all calculations.**\n"
+                        "**Format: <x2/x3> <80/120/160/240> <A B C D E F G>**"
+            )
             await message.reply("\n".join(lines), mention_author=True)
 
         except ValueError:
